@@ -1,0 +1,9 @@
+services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=curvas_db'
+      - 'POSTGRES_PASSWORD=postgres'
+      - 'POSTGRES_USER=password123'
+    ports:
+      - '5432'
