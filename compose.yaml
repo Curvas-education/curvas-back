@@ -1,9 +1,12 @@
+version: '3.9'
+
 services:
-  postgres:
-    image: 'postgres:latest'
+  db:
+    image: postgres:15.3-alpine3.18
+    container_name: db_curvas_mvp
     environment:
-      - 'POSTGRES_DB=curvas_db'
-      - 'POSTGRES_PASSWORD=postgres'
-      - 'POSTGRES_USER=password123'
+      POSTGRES_PASSWORD: password123
+      POSTGRES_USER: postgres
+      POSTGRES_DB: curvas_db
     ports:
-      - '5432'
+      - "5432:5432"
