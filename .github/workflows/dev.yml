@@ -1,0 +1,41 @@
+name: Deploy Curvas MVP Application
+on:
+  push:
+    branches: [feat/mvp]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+#
+#      - name: Setup Java
+#        uses: actions/setup-java@v3
+#        with:
+#          distribution: 'openjdk'
+#          java-version: '21'
+#
+#      - name: Build Project
+#        run: mvn clean install -DskipTests
+#
+#      - name: Login Docker Hub
+#        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+#
+#      - name: Build Docker Image
+#        run: docker build -t gilbertomoj/auth-api .
+#
+#      - name: Push image Docker
+#        run: docker push gilbertomoj/auth-api
+#  deploy:
+#    needs: build
+#    runs-on: self-hosted
+#    steps:
+#      - name: Pull image from docker hub
+#        run: docker pull gilbertomoj/auth-api
+#
+#      - name: Remove docker container
+#        run: docker rm -f auth-api
+#
+#      - name: Run docker container
+#        run: docker run -d -p 8080:8080 --name auth-api gilbertomoj/auth-api
