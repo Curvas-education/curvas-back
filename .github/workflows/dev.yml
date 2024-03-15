@@ -39,4 +39,4 @@ jobs:
         run: docker rm -f curvas-back-mvp
 
       - name: Run docker container
-        run: docker run -d -p 8080:8080 -e DATABASE_USER=${{secrets.DATABASE_USERNAME}} -e DATABASE_PASSWORD='${{secrets.DATABASE_PASSWORD}}' -e DATABASE_URL=${{secrets.DATABASE_URL}} -e JWT_SECRET=${{secrets.JWT_SECRET}} --name curvas-back-mvp gilbertomoj/curvas-back-mvp
+        run: docker run -d -p 8080:8080 -e DATABASE_USER=${{secrets.DATABASE_USER}} -e DATABASE_PASSWORD='${{secrets.DATABASE_PASSWORD}}' -e DATABASE_URL=${{secrets.DATABASE_URL}} -e JWT_SECRET=${{secrets.JWT_SECRET}} --name curvas-back-mvp gilbertomoj/curvas-back-mvp
