@@ -28,16 +28,15 @@ jobs:
       - name: Push Curvas Docker image
         run: docker push gilbertomoj/curvas-back-mvp
 
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull gilbertomoj/curvas-back-mvp
 
-#  deploy:
-#    needs: build
-#    runs-on: self-hosted
-#    steps:
-#      - name: Pull image from docker hub
-#        run: docker pull gilbertomoj/auth-api
-#
-#      - name: Remove docker container
-#        run: docker rm -f auth-api
-#
-#      - name: Run docker container
-#        run: docker run -d -p 8080:8080 --name auth-api gilbertomoj/auth-api
+      - name: Remove docker container
+        run: docker rm -f curvas-back-mvp
+
+      - name: Run docker container
+        run: docker run -d -p 8080:8080 --name curvas-back-mvp gilbertomoj/curvas-back-mvp
