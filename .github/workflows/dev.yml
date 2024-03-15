@@ -9,24 +9,26 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-#
-#      - name: Setup Java
-#        uses: actions/setup-java@v3
-#        with:
-#          distribution: 'openjdk'
-#          java-version: '21'
-#
-#      - name: Build Project
-#        run: mvn clean install -DskipTests
-#
-#      - name: Login Docker Hub
-#        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-#
-#      - name: Build Docker Image
-#        run: docker build -t gilbertomoj/auth-api .
-#
-#      - name: Push image Docker
-#        run: docker push gilbertomoj/auth-api
+
+      - name: Setup Java Version
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build Project
+        run: mvn clean install -DskipTests
+
+      - name: Login Docker Hub
+        run: docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Build Docker Image
+        run: docker build -t gilbertomoj/curvas-back-mvp .
+
+      - name: Push Curvas Docker image
+        run: docker push gilbertomoj/curvas-back-mvp
+
+
 #  deploy:
 #    needs: build
 #    runs-on: self-hosted
