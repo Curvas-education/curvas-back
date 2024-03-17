@@ -1,24 +1,21 @@
 package com.example.curvasbackmvp.controllers;
 
+import com.example.curvasbackmvp.infra.exceptions.user.EmailAlreadyExistsException;
 import com.example.curvasbackmvp.infra.security.LoginResponseDTO;
 import com.example.curvasbackmvp.infra.security.TokenService;
 import com.example.curvasbackmvp.models.student.Student;
+import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.example.curvasbackmvp.models.user.AuthenticationDTO;
-import com.example.curvasbackmvp.models.user.RegisterDTO;
 import com.example.curvasbackmvp.models.user.User;
-import com.example.curvasbackmvp.repositories.StudentRepository;
-import com.example.curvasbackmvp.repositories.UserRepository;
 import com.example.curvasbackmvp.services.StudentService;
+import com.example.curvasbackmvp.services.TeacherService;
+import com.example.curvasbackmvp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth")
@@ -28,34 +25,34 @@ public class AuthController {
 
     @Autowired
     private StudentService studentService;
-
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    private TeacherService teacherService;
     @Autowired
-    private UserRepository userRepository;
-
+    private UserService userService;
     @Autowired
     TokenService tokenService;
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((User) auth.getPrincipal());
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity register(@RequestBody Student student) {
-        System.out.println("teste01");
-        if(userRepository.findByEmail(student.getEmail()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        String encryptedPassword = new BCryptPasswordEncoder().encode(student.getPassword());
-        student.setPassword(encryptedPassword);
+    @PostMapping("/student/register")
+    public ResponseEntity<String> register(@RequestBody Student student) throws EmailAlreadyExistsException {
+        if(userService.findUserEmail(student.getEmail()) != null) throw new EmailAlreadyExistsException();
         studentService.create(student);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body("Student created successfully");
     }
+
+    @PostMapping("/teacher/register")
+    public ResponseEntity<String> register(@RequestBody Teacher teacher) throws EmailAlreadyExistsException {
+        if(userService.findUserEmail(teacher.getEmail()) != null) throw new EmailAlreadyExistsException();
+        teacherService.create(teacher);
+        return ResponseEntity.ok().body("Teacher created successfully");
+    }
+
+
 }

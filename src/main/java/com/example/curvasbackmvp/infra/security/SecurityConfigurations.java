@@ -22,11 +22,17 @@ public class SecurityConfigurations {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
         return httpSecurity
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
+                         .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/questions").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.POST, "/questions").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.PUT, "/questions/**").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.DELETE, "/questions/**").hasRole("TEACHER")
 //                        .requestMatchers(HttpMethod.POST, "/product").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.PUT, "/product").hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -53,8 +53,17 @@ public abstract class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(this.userRole == UserRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-        else return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        if(this.userRole == UserRole.ADMIN || this.userRole == UserRole.MANAGER) return List.of(
+                new SimpleGrantedAuthority("ROLE_ADMIN"),
+                new SimpleGrantedAuthority("ROLE_MANAGER"),
+                new SimpleGrantedAuthority("ROLE_TEACHER"),
+                new SimpleGrantedAuthority("ROLE_STUDENT")
+        );
+
+
+        else return List.of(new SimpleGrantedAuthority("ROLE_" + this.userRole));
+
+
     }
 
     @Override
