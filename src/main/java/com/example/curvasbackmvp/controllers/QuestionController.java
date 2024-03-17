@@ -17,10 +17,15 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @GetMapping()
+    @GetMapping("teacher")
     public ResponseEntity<List<Question>> getQuestions(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok().body(questionService.getQuestions(user));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<Question>> findQuestions() {
+        return ResponseEntity.ok().body(questionService.findAllQuestions());
     }
 
     @PostMapping()

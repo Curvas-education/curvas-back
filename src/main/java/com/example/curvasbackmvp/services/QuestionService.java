@@ -43,4 +43,8 @@ public class QuestionService {
     public List<Question> getQuestions(User user) {
         return questionRepository.findAllByAuthor_Registration(user.getRegistration());
     }
+
+    public List<Question> findAllQuestions() {
+        return questionRepository.findAll();
+    }
 }
