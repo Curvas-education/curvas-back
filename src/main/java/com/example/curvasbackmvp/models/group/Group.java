@@ -1,6 +1,7 @@
 package com.example.curvasbackmvp.models.group;
 
 import com.example.curvasbackmvp.models.exam.Exam;
+import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.example.curvasbackmvp.models.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,8 @@ public class Group {
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> users;
+    @ManyToOne
+    private Teacher creator;
     @OneToMany(mappedBy = "group")
     private List<Exam> exams;
 //    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)

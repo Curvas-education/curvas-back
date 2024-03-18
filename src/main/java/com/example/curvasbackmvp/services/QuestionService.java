@@ -1,5 +1,7 @@
 package com.example.curvasbackmvp.services;
 
+import com.example.curvasbackmvp.infra.exceptions.question.QuestionNotFoundException;
+import com.example.curvasbackmvp.infra.exceptions.question.UnauthorizedDeleteException;
 import com.example.curvasbackmvp.models.question.Alternative;
 import com.example.curvasbackmvp.models.question.Question;
 import com.example.curvasbackmvp.models.teacher.Teacher;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class QuestionService {
@@ -46,5 +50,17 @@ public class QuestionService {
 
     public List<Question> findAllQuestions() {
         return questionRepository.findAll();
+    }
+
+    public void deleteQuestion(String id, User user) throws RuntimeException {
+        Optional<Question> question = questionRepository.findById(id);
+        if(question.isEmpty()) {
+            throw new QuestionNotFoundException();
+        }
+
+        if(!Objects.equals(question.get().getAuthor().getEmail(), user.getEmail())) {
+            throw new UnauthorizedDeleteException();
+        }
+        questionRepository.deleteById(id);
     }
 }

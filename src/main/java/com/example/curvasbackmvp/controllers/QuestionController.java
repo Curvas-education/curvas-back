@@ -17,7 +17,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @GetMapping("teacher")
+    @GetMapping("/teacher")
     public ResponseEntity<List<Question>> getQuestions(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok().body(questionService.getQuestions(user));
@@ -32,6 +32,14 @@ public class QuestionController {
     public ResponseEntity<Question> createQuestion(@RequestBody Question question, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         return ResponseEntity.ok(questionService.saveQuestion(question, user));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteQuestion(@PathVariable String id, Authentication authentication) throws Exception {
+        // TODO: utilizar preautorize
+        User user = (User) authentication.getPrincipal(); // TODO: professor só pode deletar ou atualizar suas proprias questões
+        questionService.deleteQuestion(id, user);
+        return ResponseEntity.ok().body("Question deleted");
     }
 
 }

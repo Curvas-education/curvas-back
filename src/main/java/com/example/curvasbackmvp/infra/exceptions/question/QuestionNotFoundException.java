@@ -1,21 +1,20 @@
-package com.example.curvasbackmvp.infra.exceptions.user;
+package com.example.curvasbackmvp.infra.exceptions.question;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserNotFoundException extends RuntimeException {
-    public UserNotFoundException() {
-        super("Incorrect credentials");
+public class QuestionNotFoundException extends RuntimeException{
+    public QuestionNotFoundException() {
+        super("Question with this ID doesn't exist");
     }
-    public UserNotFoundException(String message) {
+    public QuestionNotFoundException(String message) {
         super(message);
     }
+
     public Map<String, Object> getErrorMap() {
         Map<String, Object> errorMap = new HashMap<>();
         errorMap.put("error", 400);
         errorMap.put("message", getMessage());
         return errorMap;
     }
-
-
 }
