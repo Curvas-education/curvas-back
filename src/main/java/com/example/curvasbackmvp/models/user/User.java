@@ -1,10 +1,14 @@
 package com.example.curvasbackmvp.models.user;
 
+import com.example.curvasbackmvp.models.group.Group;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +24,12 @@ import java.util.UUID;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "user_type")
 @Entity
-@Table(name = "user", schema = "public")
+@Table(name = "users") // TODO: resolver problema na geração do SQL
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "registration")
 public abstract class User implements UserDetails {
     @Id
     @Column(unique = true)
@@ -38,6 +45,10 @@ public abstract class User implements UserDetails {
     private Boolean active = true;
     private Date birthDate;
     private UserRole userRole;
+    @ManyToMany(mappedBy = "users")
+    @JsonBackReference
+    @JsonIgnoreProperties(value = "users") // Evitar recursão
+    private List<Group> groups;
 
     public User(String email, String encryptedPassword, UserRole userRole) {
         this.email = email;
@@ -48,8 +59,6 @@ public abstract class User implements UserDetails {
     public User(String registration, String name, String email, String phone, String about, String cpf, Boolean active, Date birthDate, UserRole userRole) {
     }
     // TODO: adicionar os grupos
-//    @ManyToMany(mappedBy = "users")
-//    private List<Group> group;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

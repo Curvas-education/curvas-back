@@ -16,11 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000/")
 @RequestMapping("auth")
 public class AuthController {
     @Autowired
@@ -34,6 +36,7 @@ public class AuthController {
     private UserService userService;
     @Autowired
     TokenService tokenService;
+
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data) throws BadCredentialsException {
@@ -49,6 +52,7 @@ public class AuthController {
 
     @PostMapping("/student/register")
     public ResponseEntity<String> register(@RequestBody Student student) throws EmailAlreadyExistsException {
+        System.out.println(student);
         if(userService.findUserEmail(student.getEmail()) != null) throw new EmailAlreadyExistsException();
         studentService.create(student);
         return ResponseEntity.ok().body("Student created successfully");

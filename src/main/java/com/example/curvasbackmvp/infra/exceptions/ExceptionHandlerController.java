@@ -1,5 +1,7 @@
 package com.example.curvasbackmvp.infra.exceptions;
 
+import com.example.curvasbackmvp.infra.exceptions.exam.IncompatibleDateStart;
+import com.example.curvasbackmvp.infra.exceptions.exam.LowDurationExamException;
 import com.example.curvasbackmvp.infra.exceptions.question.QuestionNotFoundException;
 import com.example.curvasbackmvp.infra.exceptions.question.UnauthorizedDeleteException;
 import com.example.curvasbackmvp.infra.exceptions.user.EmailAlreadyExistsException;
@@ -50,5 +52,20 @@ public class ExceptionHandlerController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMap);
     }
 
+    @ExceptionHandler(LowDurationExamException.class)
+    public ResponseEntity<Object> handleLowDurationExamException(LowDurationExamException ex) {
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("error", 401);
+        errorMap.put("message", "The exam must take 1 hour or more");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMap);
+    }
+
+    @ExceptionHandler(IncompatibleDateStart.class)
+    public ResponseEntity<Object> handleIncompatibleDateStart(IncompatibleDateStart ex) {
+        Map<String, Object> errorMap = new HashMap<>();
+        errorMap.put("error", 401);
+        errorMap.put("message", "Incompatible exam start data");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMap);
+    }
 
 }

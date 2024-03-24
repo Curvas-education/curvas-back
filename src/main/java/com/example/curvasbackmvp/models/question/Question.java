@@ -2,6 +2,8 @@ package com.example.curvasbackmvp.models.question;
 
 import com.example.curvasbackmvp.models.exam.Exam;
 import com.example.curvasbackmvp.models.teacher.Teacher;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,7 +34,10 @@ public class Question {
     private String source;
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonIgnoreProperties(value = "groups")
     private Teacher author;
     @ManyToMany(mappedBy = "questions")
+    @JsonBackReference
+    @JsonIgnoreProperties(value = "questions")
     private List<Exam> exam;
 }

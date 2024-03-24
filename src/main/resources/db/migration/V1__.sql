@@ -1,5 +1,3 @@
-CREATE SEQUENCE IF NOT EXISTS groups_seq START WITH 1 INCREMENT BY 50;
-
 CREATE TABLE alternative
 (
     id          VARCHAR(255) NOT NULL,
@@ -9,28 +7,45 @@ CREATE TABLE alternative
     CONSTRAINT pk_alternative PRIMARY KEY (id)
 );
 
+CREATE TABLE answer
+(
+    id             VARCHAR(255) NOT NULL,
+    users_id       VARCHAR(255),
+    exam_id        VARCHAR(255),
+    question_id    VARCHAR(36),
+    alternative_id VARCHAR(255),
+    CONSTRAINT pk_answer PRIMARY KEY (id)
+);
+
 CREATE TABLE exam_questions
 (
-    exam_id     BIGINT      NOT NULL,
-    question_id VARCHAR(36) NOT NULL
+    exam_id     VARCHAR(255) NOT NULL,
+    question_id VARCHAR(36)  NOT NULL
 );
 
 CREATE TABLE exams
 (
-    id          BIGINT NOT NULL,
+    id          VARCHAR(255) NOT NULL,
     name        VARCHAR(255),
     description VARCHAR(255),
     teacher_id  VARCHAR(255),
-    group_id    BIGINT,
     points      INTEGER,
     start_time  TIMESTAMP WITHOUT TIME ZONE,
     end_time    TIMESTAMP WITHOUT TIME ZONE,
+    created_at  TIMESTAMP WITHOUT TIME ZONE,
+    updated_at  TIMESTAMP WITHOUT TIME ZONE,
     CONSTRAINT pk_exams PRIMARY KEY (id)
+);
+
+CREATE TABLE group_exams
+(
+    exam_id  VARCHAR(255) NOT NULL,
+    group_id VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE groups
 (
-    id                   BIGINT NOT NULL,
+    id                   VARCHAR(255) NOT NULL,
     name                 VARCHAR(255),
     description          VARCHAR(255),
     image                VARCHAR(255),
@@ -40,8 +55,9 @@ CREATE TABLE groups
 
 CREATE TABLE groups_users
 (
-    group_id BIGINT       NOT NULL,
-    user_id  VARCHAR(255) NOT NULL
+    group_id VARCHAR(255) NOT NULL,
+    user_id  VARCHAR(255) NOT NULL,
+    CONSTRAINT pk_groups_users PRIMARY KEY (group_id, user_id)
 );
 
 CREATE TABLE questions
@@ -56,7 +72,7 @@ CREATE TABLE questions
     CONSTRAINT pk_questions PRIMARY KEY (id)
 );
 
-CREATE TABLE "user"
+CREATE TABLE users
 (
     registration VARCHAR(255) NOT NULL,
     user_type    VARCHAR(31),
@@ -71,29 +87,38 @@ CREATE TABLE "user"
     user_role    SMALLINT,
     cv_lattes    VARCHAR(255),
     website      VARCHAR(255),
-    CONSTRAINT pk_user PRIMARY KEY (registration)
+    CONSTRAINT pk_users PRIMARY KEY (registration)
 );
 
-ALTER TABLE "user"
-    ADD CONSTRAINT uc_user_cpf UNIQUE (cpf);
+ALTER TABLE users
+    ADD CONSTRAINT uc_users_cpf UNIQUE (cpf);
 
-ALTER TABLE "user"
-    ADD CONSTRAINT uc_user_email UNIQUE (email);
+ALTER TABLE users
+    ADD CONSTRAINT uc_users_email UNIQUE (email);
 
 ALTER TABLE alternative
     ADD CONSTRAINT FK_ALTERNATIVE_ON_QUESTION FOREIGN KEY (question_id) REFERENCES questions (id);
 
-ALTER TABLE exams
-    ADD CONSTRAINT FK_EXAMS_ON_GROUP FOREIGN KEY (group_id) REFERENCES groups (id);
+ALTER TABLE answer
+    ADD CONSTRAINT FK_ANSWER_ON_ALTERNATIVE FOREIGN KEY (alternative_id) REFERENCES alternative (id);
+
+ALTER TABLE answer
+    ADD CONSTRAINT FK_ANSWER_ON_EXAM FOREIGN KEY (exam_id) REFERENCES exams (id);
+
+ALTER TABLE answer
+    ADD CONSTRAINT FK_ANSWER_ON_QUESTION FOREIGN KEY (question_id) REFERENCES questions (id);
+
+ALTER TABLE answer
+    ADD CONSTRAINT FK_ANSWER_ON_USERS FOREIGN KEY (users_id) REFERENCES users (registration);
 
 ALTER TABLE exams
-    ADD CONSTRAINT FK_EXAMS_ON_TEACHER FOREIGN KEY (teacher_id) REFERENCES "user" (registration);
+    ADD CONSTRAINT FK_EXAMS_ON_TEACHER FOREIGN KEY (teacher_id) REFERENCES users (registration);
 
 ALTER TABLE groups
-    ADD CONSTRAINT FK_GROUPS_ON_CREATOR_REGISTRATION FOREIGN KEY (creator_registration) REFERENCES "user" (registration);
+    ADD CONSTRAINT FK_GROUPS_ON_CREATOR_REGISTRATION FOREIGN KEY (creator_registration) REFERENCES users (registration);
 
 ALTER TABLE questions
-    ADD CONSTRAINT FK_QUESTIONS_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES "user" (registration);
+    ADD CONSTRAINT FK_QUESTIONS_ON_AUTHOR FOREIGN KEY (author_id) REFERENCES users (registration);
 
 ALTER TABLE exam_questions
     ADD CONSTRAINT fk_exaque_on_exam FOREIGN KEY (exam_id) REFERENCES exams (id);
@@ -101,8 +126,14 @@ ALTER TABLE exam_questions
 ALTER TABLE exam_questions
     ADD CONSTRAINT fk_exaque_on_question FOREIGN KEY (question_id) REFERENCES questions (id);
 
+ALTER TABLE group_exams
+    ADD CONSTRAINT fk_groexa_on_exam FOREIGN KEY (exam_id) REFERENCES exams (id);
+
+ALTER TABLE group_exams
+    ADD CONSTRAINT fk_groexa_on_group FOREIGN KEY (group_id) REFERENCES groups (id);
+
 ALTER TABLE groups_users
     ADD CONSTRAINT fk_grouse_on_group FOREIGN KEY (group_id) REFERENCES groups (id);
 
 ALTER TABLE groups_users
-    ADD CONSTRAINT fk_grouse_on_user FOREIGN KEY (user_id) REFERENCES "user" (registration);
+    ADD CONSTRAINT fk_grouse_on_user FOREIGN KEY (user_id) REFERENCES users (registration);
