@@ -29,6 +29,7 @@ public class Exam {
     private String id;
     private String name;
     private String description;
+    // Adicionar tipo (Prova, Revisão, Sondagem)
     @ManyToOne
     @JoinColumn(name = "teacher_id")
     private Teacher teacher;
