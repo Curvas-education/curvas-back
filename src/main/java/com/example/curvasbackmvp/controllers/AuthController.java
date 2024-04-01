@@ -22,7 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000/")
+@CrossOrigin
 @RequestMapping("auth")
 public class AuthController {
     @Autowired
@@ -37,7 +37,6 @@ public class AuthController {
     @Autowired
     TokenService tokenService;
 
-
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data) throws BadCredentialsException {
         try {
@@ -49,6 +48,7 @@ public class AuthController {
             throw new BadCredentialsException(""); // TODO: criar um exception para o bad credential;
         }
     }
+
 
     @PostMapping("/student/register")
     public ResponseEntity<String> register(@RequestBody Student student) throws EmailAlreadyExistsException {
