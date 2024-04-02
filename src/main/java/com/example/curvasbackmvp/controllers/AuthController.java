@@ -20,9 +20,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:19006")
 @RequestMapping("auth")
 public class AuthController {
     @Autowired
@@ -38,7 +39,7 @@ public class AuthController {
     TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data) throws BadCredentialsException {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data, UriComponentsBuilder uriBuilder) throws BadCredentialsException {
         try {
             var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
             var auth = this.authenticationManager.authenticate(usernamePassword);
