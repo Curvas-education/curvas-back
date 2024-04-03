@@ -45,6 +45,7 @@ public class SecurityConfigurations {
                          .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                          .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/questions").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.GET, "/questions").hasRole("STUDENT")
                         .requestMatchers(HttpMethod.POST, "/questions").hasRole("TEACHER")

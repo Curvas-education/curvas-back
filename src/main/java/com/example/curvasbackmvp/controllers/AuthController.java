@@ -4,23 +4,30 @@ import com.example.curvasbackmvp.infra.exceptions.user.EmailAlreadyExistsExcepti
 import com.example.curvasbackmvp.infra.exceptions.user.UserNotFoundException;
 import com.example.curvasbackmvp.infra.security.LoginResponseDTO;
 import com.example.curvasbackmvp.infra.security.TokenService;
+import com.example.curvasbackmvp.models.group.Group;
 import com.example.curvasbackmvp.models.student.Student;
 import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.example.curvasbackmvp.models.user.AuthenticationDTO;
 import com.example.curvasbackmvp.models.user.User;
+import com.example.curvasbackmvp.models.user.ValidateDTO;
+import com.example.curvasbackmvp.repositories.UserRepository;
 import com.example.curvasbackmvp.services.StudentService;
 import com.example.curvasbackmvp.services.TeacherService;
 import com.example.curvasbackmvp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:19006")
@@ -37,6 +44,8 @@ public class AuthController {
     private UserService userService;
     @Autowired
     TokenService tokenService;
+    @Autowired
+    UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody AuthenticationDTO data, UriComponentsBuilder uriBuilder) throws BadCredentialsException {
@@ -66,5 +75,11 @@ public class AuthController {
         return ResponseEntity.ok().body("Teacher created successfully");
     }
 
+    @GetMapping("/validate/{token}")
+    public ResponseEntity<UserDetails> validate(@PathVariable String token) throws Exception {
+        var login = tokenService.validateToken(token);
+        UserDetails user = userRepository.findByEmail(login);
+        return ResponseEntity.ok().body(user);
+    }
 
 }
