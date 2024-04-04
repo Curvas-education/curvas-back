@@ -16,12 +16,15 @@ public class TeacherService {
     @Autowired
     TeacherRepository teacherRepository;
 
-    public void create(Teacher teacher) throws RegistrationAlreadyExistsException {
+    @Autowired
+    UserService userService;
 
+    public void create(Teacher teacher) throws RegistrationAlreadyExistsException {
         if(teacherRepository.findById(teacher.getRegistration()).isPresent()) throw new RegistrationAlreadyExistsException();
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(teacher.getPassword());
         teacher.setPassword(encryptedPassword);
+        teacher.setSlug(userService.createSlug(teacher.getName()));
         teacherRepository.save(teacher);
     }
 }

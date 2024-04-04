@@ -79,6 +79,8 @@ CREATE TABLE users
     name         VARCHAR(255),
     email        VARCHAR(255),
     password     VARCHAR(255),
+    icon         VARCHAR(255),
+    slug         VARCHAR(255),
     phone        VARCHAR(255),
     about        VARCHAR(255),
     cpf          VARCHAR(255),
@@ -95,6 +97,9 @@ ALTER TABLE users
 
 ALTER TABLE users
     ADD CONSTRAINT uc_users_email UNIQUE (email);
+
+ALTER TABLE users
+    ADD CONSTRAINT uc_users_slug UNIQUE (slug);
 
 ALTER TABLE alternative
     ADD CONSTRAINT FK_ALTERNATIVE_ON_QUESTION FOREIGN KEY (question_id) REFERENCES questions (id);

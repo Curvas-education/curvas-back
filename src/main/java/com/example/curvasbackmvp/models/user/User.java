@@ -38,6 +38,9 @@ public abstract class User implements UserDetails {
     @Column(unique = true)
     private String email;
     private String password;
+    private String icon;
+    @Column(unique = true)
+    private String slug;
     private String phone;
     private String about;
     @Column(unique = true)

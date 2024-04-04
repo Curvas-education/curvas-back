@@ -33,7 +33,7 @@ public class StudentService {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(student.getPassword());
         student.setPassword(encryptedPassword);
-
+        student.setSlug(userService.createSlug(student.getName()));
         studentRepository.save(student);
     }
 
