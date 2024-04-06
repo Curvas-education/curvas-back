@@ -5,6 +5,7 @@ import com.example.curvasbackmvp.infra.exceptions.exam.LowDurationExamException;
 import com.example.curvasbackmvp.infra.exceptions.question.QuestionNotFoundException;
 import com.example.curvasbackmvp.infra.exceptions.question.UnauthorizedDeleteException;
 import com.example.curvasbackmvp.infra.exceptions.user.EmailAlreadyExistsException;
+import com.example.curvasbackmvp.infra.exceptions.user.PrivateProfileException;
 import com.example.curvasbackmvp.infra.exceptions.user.RegistrationAlreadyExistsException;
 import com.example.curvasbackmvp.infra.exceptions.user.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,11 @@ public class ExceptionHandlerController {
         errorMap.put("error", 401);
         errorMap.put("message", "Non-existent user or invalid password");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorMap);
+    }
+
+    @ExceptionHandler(PrivateProfileException.class)
+    public ResponseEntity<Object> handlePrivateProfileException(PrivateProfileException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getErrorMap());
     }
 
     @ExceptionHandler(QuestionNotFoundException.class)

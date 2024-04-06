@@ -27,6 +27,8 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
+    public User findUserBySlug(String slug) { return userRepository.findUserBySlug(slug); }
+
     public User getLoggedUserSession() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
