@@ -71,6 +71,7 @@ public class AuthController {
     public ResponseEntity<UserDetails> validate(@PathVariable String token) throws Exception {
         var login = tokenService.validateToken(token);
         UserDetails user = userRepository.findByEmail(login);
+        if (user == null) throw new RuntimeException();
         return ResponseEntity.ok().body(user);
     }
 
