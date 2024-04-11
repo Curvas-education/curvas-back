@@ -4,6 +4,7 @@ import com.example.curvasbackmvp.infra.exceptions.user.RegistrationAlreadyExists
 import com.example.curvasbackmvp.models.exam.Exam;
 import com.example.curvasbackmvp.models.student.Student;
 import com.example.curvasbackmvp.models.user.User;
+import com.example.curvasbackmvp.models.user.UserRole;
 import com.example.curvasbackmvp.repositories.ExamRepository;
 import com.example.curvasbackmvp.repositories.StudentRepository;
 import com.example.curvasbackmvp.repositories.UserRepository;
@@ -34,6 +35,7 @@ public class StudentService {
         String encryptedPassword = new BCryptPasswordEncoder().encode(student.getPassword());
         student.setPassword(encryptedPassword);
         student.setSlug(userService.createSlug(student.getName()));
+        student.setUserRole(UserRole.STUDENT);
         studentRepository.save(student);
     }
 
