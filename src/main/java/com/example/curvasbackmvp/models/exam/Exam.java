@@ -11,12 +11,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -70,4 +69,10 @@ public class Exam {
         this.startTime = examData.getStartDate();
         this.endTime = examData.getEndDate();
     }
+
+    private ExamDTO convertToDto(Exam exam, ModelMapper modelMaper) {
+        return modelMaper.map(exam, ExamDTO.class);
+    }
+
+
 }

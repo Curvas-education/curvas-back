@@ -1,10 +1,12 @@
 package com.example.curvasbackmvp.services;
 
 import com.example.curvasbackmvp.infra.exceptions.user.RegistrationAlreadyExistsException;
+import com.example.curvasbackmvp.models.exam.Answer;
 import com.example.curvasbackmvp.models.exam.Exam;
 import com.example.curvasbackmvp.models.student.Student;
 import com.example.curvasbackmvp.models.user.User;
 import com.example.curvasbackmvp.models.user.UserRole;
+import com.example.curvasbackmvp.repositories.AnswerRepository;
 import com.example.curvasbackmvp.repositories.ExamRepository;
 import com.example.curvasbackmvp.repositories.StudentRepository;
 import com.example.curvasbackmvp.repositories.UserRepository;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
@@ -20,13 +24,16 @@ public class StudentService {
     private StudentRepository studentRepository;
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Autowired
-    ExamService examService;
+    private ExamService examService;
 
     @Autowired
-    ExamRepository examRepository;
+    private ExamRepository examRepository;
+
+    @Autowired
+    private AnswerRepository answerRepository;
 
     public void create(Student student) throws RegistrationAlreadyExistsException {
 
@@ -43,9 +50,9 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public List<Exam> findStudentExams() {
-        User user = userService.getLoggedUserSession();
-        List<String> exams_id = studentRepository.findStudentExams(user.getRegistration());
-        return examRepository.findAllById(exams_id);
+
+
+    public Student findStudentById(String id) {
+        return studentRepository.findById(id).get();
     }
 }

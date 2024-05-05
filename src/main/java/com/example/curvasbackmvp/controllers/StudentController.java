@@ -27,11 +27,11 @@ public class StudentController {
         return ResponseEntity.ok(studentService.findAll());
     }
 
-    @GetMapping("exams")
-    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_STUDENT')")
-    public ResponseEntity<List<Exam>> getStudentExams() {
-        return ResponseEntity.ok(studentService.findStudentExams());
-    }
+//    @GetMapping("exams")
+//    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_STUDENT')")
+//    public ResponseEntity<List<Exam>> getStudentExams() {
+//        return ResponseEntity.ok(studentService.findStudentExams());
+//    }
 
 
     @PutMapping("/{id}")
