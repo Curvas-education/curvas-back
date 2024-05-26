@@ -52,6 +52,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "/questions").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.PUT, "/questions/**").hasRole("TEACHER")
                         .requestMatchers(HttpMethod.DELETE, "/questions/**").hasRole("TEACHER")
+                        .requestMatchers(HttpMethod.GET, "/socket/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
