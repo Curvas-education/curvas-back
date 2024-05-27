@@ -4,6 +4,7 @@ import com.example.curvasbackmvp.models.group.Group;
 import com.example.curvasbackmvp.models.group.GroupRequestDTO;
 import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.example.curvasbackmvp.models.user.User;
+import com.example.curvasbackmvp.models.user.UserRole;
 import com.example.curvasbackmvp.repositories.GroupRepository;
 import com.example.curvasbackmvp.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 public class GroupService {
@@ -27,6 +26,9 @@ public class GroupService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    StudentService studentService;
 
     public Group createGroup(GroupRequestDTO groupData) {
         Group group = new Group(groupData);
@@ -43,12 +45,35 @@ public class GroupService {
         return groupRepository.findAll();
     }
 
-    public List<Group> findUserGroups(User user) {
-        return groupRepository.findAllByCreator(user);
+    public List<Group> findUserGroups() {
+        User user = userService.getLoggedUserSession();
+        if (user.getUserRole() == UserRole.TEACHER) {
+            return groupRepository.findAllByCreator(user);
+        } if (user.getUserRole() == UserRole.STUDENT) {
+            List<String> ids = user.getGroups().stream().map(Group::getId).toList();
+            return groupRepository.findAllById(ids);
+        } else {
+            return null;
+        }
+
     }
 
     public void deleteGroup(String id) {
-        groupRepository.deleteById(id);
+        User user = userService.getLoggedUserSession();
+        Optional<Group> group = groupRepository.findById(id);
+        if (group.isEmpty()) {
+            System.out.println("No group found with id " + id);
+            return;
+            // TODO: retornar um exception para o erro acima
+        }
+
+        if (group.get().getCreator() == user) {
+            groupRepository.deleteById(id);
+        } else {
+            System.out.println("You CANT delete this group");
+
+            // TODO: retornar um exception para o erro acima
+        }
     }
 
     public void editGroup(Group group) {

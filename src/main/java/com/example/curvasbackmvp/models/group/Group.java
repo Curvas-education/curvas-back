@@ -3,10 +3,7 @@ package com.example.curvasbackmvp.models.group;
 import com.example.curvasbackmvp.models.exam.Exam;
 import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.example.curvasbackmvp.models.user.User;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +35,7 @@ public class Group {
             joinColumns = @JoinColumn(name = "group_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
+    @JsonBackReference
     @JsonIgnoreProperties(value = "groups") // Evitar recursão
     private Set<User> users;
     @ManyToOne

@@ -18,15 +18,14 @@ public class GroupController {
     GroupService groupService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_TEACHER')") // Permissão apenas para admin ou gestor !!
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_STUDENT')") // Permissão apenas para admin ou gestor !!
     public ResponseEntity<List<Group>> findGroups() {
-        return ResponseEntity.ok().body(groupService.findGroups());
+        return ResponseEntity.ok().body(groupService.findUserGroups());
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER', 'ROLE_STUDENT')")
     public ResponseEntity<Group> createGroup(@RequestBody GroupRequestDTO group) {
-        System.out.println("TESTE TESTE");
         return ResponseEntity.ok().body(groupService.createGroup(group));
     }
 

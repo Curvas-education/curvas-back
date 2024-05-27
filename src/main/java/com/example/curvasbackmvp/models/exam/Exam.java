@@ -37,6 +37,8 @@ public class Exam {
             name = "exam_questions",
             joinColumns = @JoinColumn(name = "exam_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
+    @JsonBackReference
+    @JsonIgnoreProperties(value = "exams")
     private List<Question> questions;
     @OneToMany(mappedBy = "exam")
     @JsonBackReference

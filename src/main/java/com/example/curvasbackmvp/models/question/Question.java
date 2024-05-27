@@ -34,6 +34,7 @@ public class Question {
     private String source;
     @ManyToOne
     @JoinColumn(name = "author_id")
+    @JsonBackReference
     @JsonIgnoreProperties(value = "groups")
     private Teacher author;
     @ManyToMany(mappedBy = "questions")
