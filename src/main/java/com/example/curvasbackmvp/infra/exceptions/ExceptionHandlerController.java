@@ -4,6 +4,7 @@ import com.example.curvasbackmvp.infra.exceptions.exam.IncompatibleDateStart;
 import com.example.curvasbackmvp.infra.exceptions.exam.LowDurationExamException;
 import com.example.curvasbackmvp.infra.exceptions.question.QuestionNotFoundException;
 import com.example.curvasbackmvp.infra.exceptions.question.UnauthorizedDeleteException;
+import com.example.curvasbackmvp.infra.exceptions.student.StudentWithCPFAlreadyExistsException;
 import com.example.curvasbackmvp.infra.exceptions.user.EmailAlreadyExistsException;
 import com.example.curvasbackmvp.infra.exceptions.user.PrivateProfileException;
 import com.example.curvasbackmvp.infra.exceptions.user.RegistrationAlreadyExistsException;
@@ -26,6 +27,11 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(RegistrationAlreadyExistsException.class)
     public ResponseEntity<Object> handleRegistrationAlreadyExists(RegistrationAlreadyExistsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getErrorMap());
+    }
+
+    @ExceptionHandler(StudentWithCPFAlreadyExistsException.class)
+    public ResponseEntity<Object> handleStudentWithCPFAlreadyExistsException(StudentWithCPFAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getErrorMap());
     }
 

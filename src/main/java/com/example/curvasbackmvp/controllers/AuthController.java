@@ -6,6 +6,7 @@ import com.example.curvasbackmvp.infra.security.TokenService;
 import com.example.curvasbackmvp.models.student.Student;
 import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.example.curvasbackmvp.models.user.AuthenticationDTO;
+import com.example.curvasbackmvp.models.user.RegisterDTO;
 import com.example.curvasbackmvp.models.user.User;
 import com.example.curvasbackmvp.repositories.UserRepository;
 import com.example.curvasbackmvp.services.StudentService;
@@ -53,10 +54,9 @@ public class AuthController {
 
 
     @PostMapping("/student/register")
-    public ResponseEntity<String> register(@RequestBody Student student) throws EmailAlreadyExistsException {
-        System.out.println(student);
-        if(userService.findUserEmail(student.getEmail()) != null) throw new EmailAlreadyExistsException();
-        studentService.create(student);
+    public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) throws EmailAlreadyExistsException {
+        if(userService.findUserEmail(registerDTO.email()) != null) throw new EmailAlreadyExistsException();
+        studentService.create(registerDTO);
         return ResponseEntity.ok().body("Student created successfully");
     }
 

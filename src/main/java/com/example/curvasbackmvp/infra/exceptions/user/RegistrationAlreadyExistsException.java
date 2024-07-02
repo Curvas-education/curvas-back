@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class RegistrationAlreadyExistsException extends RuntimeException {
     public RegistrationAlreadyExistsException() {
-        super("A user with this registration is already created");
+        super("An user with this registration is already created");
     }
     public RegistrationAlreadyExistsException(String message) {
         super(message);

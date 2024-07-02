@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, String> {
     Page<Student> findAllByActiveTrue(Pageable page);
@@ -21,4 +22,6 @@ public interface StudentRepository extends JpaRepository<Student, String> {
             +"inner join users u on gu.user_id = u.registration "
             +"where u.registration = :registration", nativeQuery = true)
     List<String> findStudentExams(@Param("registration") String registration);
+
+    Optional<Student> findStudentByCpf(String cpf);
 }

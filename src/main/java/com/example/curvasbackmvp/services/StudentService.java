@@ -1,9 +1,11 @@
 package com.example.curvasbackmvp.services;
 
+import com.example.curvasbackmvp.infra.exceptions.student.StudentWithCPFAlreadyExistsException;
 import com.example.curvasbackmvp.infra.exceptions.user.RegistrationAlreadyExistsException;
 import com.example.curvasbackmvp.models.exam.Answer;
 import com.example.curvasbackmvp.models.exam.Exam;
 import com.example.curvasbackmvp.models.student.Student;
+import com.example.curvasbackmvp.models.user.RegisterDTO;
 import com.example.curvasbackmvp.models.user.User;
 import com.example.curvasbackmvp.models.user.UserRole;
 import com.example.curvasbackmvp.repositories.AnswerRepository;
@@ -46,6 +48,24 @@ public class StudentService {
         studentRepository.save(student);
     }
 
+    public void create(RegisterDTO registerDTO) throws RegistrationAlreadyExistsException {
+        if(studentRepository.findById(registerDTO.registration()).isPresent()) throw new RegistrationAlreadyExistsException();
+
+        if(studentRepository.findStudentByCpf(registerDTO.cpf()).isPresent()) throw new StudentWithCPFAlreadyExistsException();
+
+        String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
+        Student student = new Student();
+
+        student.setRegistration(registerDTO.registration());
+        student.setName(registerDTO.name());
+        student.setEmail(registerDTO.email());
+        student.setCpf(registerDTO.cpf());
+
+        student.setPassword(encryptedPassword);
+        student.setSlug(userService.createSlug(registerDTO.name()));
+        student.setUserRole(UserRole.STUDENT);
+        studentRepository.save(student);
+    }
     public List<Student> findAll() {
         return studentRepository.findAll();
     }
