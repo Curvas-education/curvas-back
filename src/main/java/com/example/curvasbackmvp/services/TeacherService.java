@@ -2,6 +2,7 @@ package com.example.curvasbackmvp.services;
 
 import com.example.curvasbackmvp.infra.exceptions.user.RegistrationAlreadyExistsException;
 import com.example.curvasbackmvp.models.teacher.Teacher;
+import com.example.curvasbackmvp.models.user.RegisterDTO;
 import com.example.curvasbackmvp.models.user.UserRole;
 import com.example.curvasbackmvp.repositories.TeacherRepository;
 import com.example.curvasbackmvp.repositories.UserRepository;
@@ -20,10 +21,18 @@ public class TeacherService {
     @Autowired
     UserService userService;
 
-    public void create(Teacher teacher) throws RegistrationAlreadyExistsException {
-        if(teacherRepository.findById(teacher.getRegistration()).isPresent()) throw new RegistrationAlreadyExistsException();
+    public void create(RegisterDTO registerDTO) throws RegistrationAlreadyExistsException {
+        if(teacherRepository.findById(registerDTO.registration()).isPresent()) throw new RegistrationAlreadyExistsException();
 
-        String encryptedPassword = new BCryptPasswordEncoder().encode(teacher.getPassword());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
+
+        Teacher teacher = new Teacher();
+
+        teacher.setRegistration(registerDTO.registration());
+        teacher.setName(registerDTO.name());
+        teacher.setEmail(registerDTO.email());
+        teacher.setCpf(registerDTO.cpf());
+
         teacher.setPassword(encryptedPassword);
         teacher.setSlug(userService.createSlug(teacher.getName()));
         teacher.setUserRole(UserRole.TEACHER);

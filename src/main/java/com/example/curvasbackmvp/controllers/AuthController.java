@@ -54,16 +54,16 @@ public class AuthController {
 
 
     @PostMapping("/student/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO) throws EmailAlreadyExistsException {
+    public ResponseEntity<String> registerStudent(@RequestBody RegisterDTO registerDTO) throws EmailAlreadyExistsException {
         if(userService.findUserEmail(registerDTO.email()) != null) throw new EmailAlreadyExistsException();
         studentService.create(registerDTO);
         return ResponseEntity.ok().body("Student created successfully");
     }
 
     @PostMapping("/teacher/register")
-    public ResponseEntity<String> register(@RequestBody Teacher teacher) throws EmailAlreadyExistsException {
-        if(userService.findUserEmail(teacher.getEmail()) != null) throw new EmailAlreadyExistsException();
-        teacherService.create(teacher);
+    public ResponseEntity<String> registerTeacher(@RequestBody RegisterDTO registerDTO) throws EmailAlreadyExistsException {
+        if(userService.findUserEmail(registerDTO.email()) != null) throw new EmailAlreadyExistsException();
+        teacherService.create(registerDTO);
         return ResponseEntity.ok().body("Teacher created successfully");
     }
 
