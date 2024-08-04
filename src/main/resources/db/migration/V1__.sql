@@ -62,13 +62,15 @@ CREATE TABLE groups_users
 
 CREATE TABLE questions
 (
-    id          VARCHAR(36) NOT NULL,
-    description VARCHAR(255),
-    image       VARCHAR(255),
-    tip         VARCHAR(255),
-    difficulty  VARCHAR(255),
-    source      VARCHAR(255),
-    author_id   VARCHAR(255),
+    id           VARCHAR(36) NOT NULL,
+    description  VARCHAR(255),
+    image        VARCHAR(255),
+    tip          VARCHAR(255),
+    difficulty   VARCHAR(255),
+    source       VARCHAR(255),
+    alt_image    VARCHAR(255),
+    source_image VARCHAR(255),
+    author_id    VARCHAR(255),
     CONSTRAINT pk_questions PRIMARY KEY (id)
 );
 

@@ -3,6 +3,7 @@ package com.example.curvasbackmvp.models.question;
 import com.example.curvasbackmvp.models.exam.Exam;
 import com.example.curvasbackmvp.models.teacher.Teacher;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,18 +28,23 @@ public class Question {
     private String image;
     // Lista de alternativas
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = "question")
     private List<Alternative> alternatives;
     private String tip; // TODO: ser desbloqueada após algum gatilho (acertar x numero de questões)
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
     private String source;
+    private String altImage;
+    private String sourceImage;
     @ManyToOne
     @JoinColumn(name = "author_id")
     @JsonBackReference
+    @JsonIgnore
     @JsonIgnoreProperties(value = "groups")
     private Teacher author;
     @ManyToMany(mappedBy = "questions")
     @JsonBackReference
+    @JsonIgnore
     @JsonIgnoreProperties(value = "questions")
     private List<Exam> exam;
 }

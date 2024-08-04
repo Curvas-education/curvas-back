@@ -34,6 +34,17 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.saveQuestion(question, user));
     }
 
+    @PutMapping()
+    public ResponseEntity<Question> updateQuestion(@RequestBody Question question) {
+        return ResponseEntity.ok(questionService.updateQuestion(question));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Question> getQuestion(@PathVariable String id) {
+        Question question = questionService.findQuestion(id);
+        return ResponseEntity.ok(question);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteQuestion(@PathVariable String id, Authentication authentication) throws Exception {
         // TODO: utilizar preautorize

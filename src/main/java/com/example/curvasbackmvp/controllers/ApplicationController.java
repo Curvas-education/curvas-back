@@ -11,7 +11,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @CrossOrigin
 @RequestMapping("api/v1")
 public class ApplicationController {
-    @GetMapping
+    @GetMapping("docs")
     public RedirectView swagger() {
         return new RedirectView("/swagger-ui/index.html");
     }    // Controller apenas para exibição do swagger

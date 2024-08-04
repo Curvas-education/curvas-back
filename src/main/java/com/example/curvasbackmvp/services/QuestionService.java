@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Service
 public class QuestionService {
@@ -62,5 +63,41 @@ public class QuestionService {
             throw new UnauthorizedDeleteException();
         }
         questionRepository.deleteById(id);
+    }
+
+    public Question updateQuestion(Question question) {
+        Question question1 = questionRepository.findById(question.getId()).get();
+        question.getAlternatives().forEach(alternative -> {
+            if(alternative.getId() != null) {
+                alternative.setQuestion(question1);
+                alternativeRepository.save(alternative);
+            } else {
+                Alternative alternative1;
+                alternative1 = alternative;
+                alternative1.setQuestion(question1);
+                alternativeRepository.save(alternative1);
+            }
+        });
+
+        List<String> alternativeList = question.getAlternatives().stream().map(Alternative::getId).toList();
+        question1.getAlternatives().forEach(alternative -> {
+            if(!alternativeList.contains(alternative.getId())) {
+                System.out.println("delete " + alternative.getId());
+                alternative.setQuestion(null);
+                alternativeRepository.save(alternative);
+                alternativeRepository.deleteById(alternative.getId());
+            }
+        });
+
+        question1.setDescription(question.getDescription());
+        question1.setTip(question.getTip());
+        question1.setDifficulty(question.getDifficulty());
+        question1.setSource(question.getSource());
+        question1.setSourceImage(question.getSourceImage());
+        question1.setAltImage(question.getAltImage());
+
+        questionRepository.save(question1);
+
+        return question;
     }
 }

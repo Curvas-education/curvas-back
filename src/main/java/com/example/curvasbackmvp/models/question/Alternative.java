@@ -1,6 +1,8 @@
 package com.example.curvasbackmvp.models.question;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +21,7 @@ public class Alternative {
     @ManyToOne
     @JoinColumn(name = "question_id")
     @JsonBackReference
+    @JsonIgnore
+    @JsonIgnoreProperties(value = "alternatives")
     private Question question;
 }
