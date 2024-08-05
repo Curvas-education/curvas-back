@@ -103,7 +103,7 @@
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>9.22.3</version>
 				<configuration>
-					<url>jdbc:postgresql://localhost:5432/curvas_db</url>
+					<url>jdbc:postgresql://18.231.183.91:5432/curvas_db</url>
 					<user>postgres</user>
 					<password>password123</password>
 				</configuration>
