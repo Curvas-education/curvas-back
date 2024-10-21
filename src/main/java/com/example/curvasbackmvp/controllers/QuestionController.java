@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.domain.Pageable;
 import java.util.List;
+import java.util.Optional;
+
 @CrossOrigin
 @RestController
 @RequestMapping("questions")
@@ -21,14 +23,14 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/teacher")
-    public ResponseEntity<List<Question>> getQuestions(Authentication authentication) {
+    public ResponseEntity<Page<Question>> getQuestions(Authentication authentication, @PageableDefault(size=10, sort="id") Pageable pageable) {
         User user = (User) authentication.getPrincipal();
-        return ResponseEntity.ok().body(questionService.getQuestions(user));
+        return ResponseEntity.ok().body(questionService.getQuestions(user, pageable));
     }
 
     @GetMapping()
-    public ResponseEntity<List<Question>> findQuestions() {
-        return ResponseEntity.ok().body(questionService.findAllQuestions());
+    public ResponseEntity<Page<Question>> findQuestions(@PageableDefault(size=10, sort="id") Pageable pageable) {
+        return ResponseEntity.ok().body(questionService.findAllQuestions(pageable));
     }
 
     @PostMapping()
@@ -48,10 +50,15 @@ public class QuestionController {
         return ResponseEntity.ok(question);
     }
 
-    @GetMapping("/search/by-description/{description}")
-    public ResponseEntity<Page<Question>> getQuestionByDescription(@PathVariable String description, @PageableDefault(size=10, sort="id") Pageable pageable) {
-        Page<Question> questions = questionService.findQuestionByDescription(description, pageable);
-        return ResponseEntity.ok(questions);
+    @GetMapping( "/search/by-description/{description}")
+    public ResponseEntity<Page<Question>> getQuestionByDescription(@PathVariable(required = false) String description, @PageableDefault(size=10, sort="id") Pageable pageable) {
+        if(description.isEmpty() || description == null) {
+            Page<Question> questions = questionService.findQuestionByDescription(description, pageable);
+            return ResponseEntity.ok(questions);
+        } else  {
+            Page<Question> questions = questionService.findAllQuestions(pageable);
+            return ResponseEntity.ok(questions);
+        }
     }
 
     @DeleteMapping("/delete/{id}")

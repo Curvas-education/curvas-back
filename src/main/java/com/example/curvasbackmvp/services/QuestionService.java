@@ -48,12 +48,12 @@ public class QuestionService {
         return questionRepository.findById(id).orElseThrow();
     }
 
-    public List<Question> getQuestions(User user) {
-        return questionRepository.findAllByAuthor_Registration(user.getRegistration());
+    public Page<Question> getQuestions(User user, Pageable pageable) {
+        return questionRepository.findAllByAuthor_Registration(user.getRegistration(), pageable);
     }
 
-    public List<Question> findAllQuestions() {
-        return questionRepository.findAll();
+    public Page<Question> findAllQuestions(Pageable pageable) {
+        return questionRepository.findAll(pageable);
     }
 
     public void deleteQuestion(String id, User user) throws RuntimeException {
@@ -105,6 +105,10 @@ public class QuestionService {
     }
 
     public Page<Question> findQuestionByDescription(String description, Pageable pageable) {
-        return questionRepository.findAllByDescriptionContaining(description, pageable);
+        if (!description.equals("")) {
+            return questionRepository.findAllByDescriptionContaining(description, pageable);
+        } else {
+            return questionRepository.findAll(pageable);
+        }
     }
 }
