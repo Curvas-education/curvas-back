@@ -4,11 +4,14 @@ import com.example.curvasbackmvp.models.question.Question;
 import com.example.curvasbackmvp.models.user.User;
 import com.example.curvasbackmvp.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 @CrossOrigin
 @RestController
@@ -43,6 +46,12 @@ public class QuestionController {
     public ResponseEntity<Question> getQuestion(@PathVariable String id) {
         Question question = questionService.findQuestion(id);
         return ResponseEntity.ok(question);
+    }
+
+    @GetMapping("/search/by-description/{description}")
+    public ResponseEntity<Page<Question>> getQuestionByDescription(@PathVariable String description, @PageableDefault(size=10, sort="id") Pageable pageable) {
+        Page<Question> questions = questionService.findQuestionByDescription(description, pageable);
+        return ResponseEntity.ok(questions);
     }
 
     @DeleteMapping("/delete/{id}")

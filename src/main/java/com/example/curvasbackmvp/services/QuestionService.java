@@ -10,7 +10,10 @@ import com.example.curvasbackmvp.repositories.AlternativeRepository;
 import com.example.curvasbackmvp.repositories.QuestionRepository;
 import com.example.curvasbackmvp.repositories.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Objects;
@@ -99,5 +102,9 @@ public class QuestionService {
         questionRepository.save(question1);
 
         return question;
+    }
+
+    public Page<Question> findQuestionByDescription(String description, Pageable pageable) {
+        return questionRepository.findAllByDescriptionContaining(description, pageable);
     }
 }

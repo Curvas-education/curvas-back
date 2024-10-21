@@ -65,7 +65,7 @@ public class AuthController {
         if(userService.findUserEmail(registerDTO.email()) != null) throw new EmailAlreadyExistsException();
         teacherService.create(registerDTO);
         return ResponseEntity.ok().body("Teacher created successfully");
-    }
+    }   
 
     @GetMapping("/validate/{token}")
     public ResponseEntity<UserDetails> validate(@PathVariable String token) throws Exception {
