@@ -105,10 +105,6 @@ public class QuestionService {
     }
 
     public Page<Question> findQuestionByDescription(String description, Pageable pageable) {
-        if (!description.equals("")) {
-            return questionRepository.findAllByDescriptionContaining(description, pageable);
-        } else {
-            return questionRepository.findAll(pageable);
-        }
+        return questionRepository.findAllByDescriptionContaining(description, pageable);
     }
 }

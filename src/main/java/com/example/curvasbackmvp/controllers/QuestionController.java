@@ -52,18 +52,13 @@ public class QuestionController {
 
     @GetMapping( "/search/by-description/{description}")
     public ResponseEntity<Page<Question>> getQuestionByDescription(@PathVariable(required = false) String description, @PageableDefault(size=10, sort="id") Pageable pageable) {
-        if(description.isEmpty() || description == null) {
-            Page<Question> questions = questionService.findQuestionByDescription(description, pageable);
-            return ResponseEntity.ok(questions);
-        } else  {
-            Page<Question> questions = questionService.findAllQuestions(pageable);
-            return ResponseEntity.ok(questions);
-        }
+         Page<Question> questions = questionService.findQuestionByDescription(description, pageable);
+         return ResponseEntity.ok(questions);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteQuestion(@PathVariable String id, Authentication authentication) throws Exception {
-        // TODO: utilizar preautorize
+            // TODO: utilizar preautorize
         User user = (User) authentication.getPrincipal(); // TODO: professor só pode deletar ou atualizar suas proprias questões
         questionService.deleteQuestion(id, user);
         return ResponseEntity.ok().body("Question deleted");
